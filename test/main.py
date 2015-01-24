@@ -46,10 +46,9 @@ req.fields="seller_nick,buyer_nick,title,type,created,sid,tid,seller_rate,buyer_
                     orders.sku_properties_name,orders.item_meal_name,orders.buyer_rate,orders.seller_rate,\
                     orders.outer_iid,orders.outer_sku_id,orders.refund_id,orders.seller_type,buyer_message"
 try:
-    # import pdb;pdb.set_trace()
+    import pdb;pdb.set_trace()
     resp= req.getResponse("6100103aec81a954a67338dc51c649a873f4541bad050863651880146")
     print("====>>",resp)
-
     # req=top.api.TradeFullinfoGetRequest("gw.api.tbsandbox.com",80)
     # tid = resp['trades_sold_get_response']['trades']['trade'][0]['tid'];
     # req.fields = "status,buyer_message"
@@ -58,7 +57,7 @@ try:
     # resp= req.getResponse("6101801ef126a76ee72479d320b397e3e91ca2072efe04e3651880146")
     # print(resp)
 
-except Exception,e:
+except Exception as e:
     print(e)
 
 #=====================================get full info of one trade===========================#
@@ -71,9 +70,10 @@ req1.tid = tid
 try:
     resp1= req1.getResponse("6100103aec81a954a67338dc51c649a873f4541bad050863651880146")
     print(resp1)
-except Exception,e:
+except Exception as e:
     print(e)
 
+#=====================================send goods use tid===========================#
 req2 = top.api.LogisticsDummySendRequest("gw.api.tbsandbox.com")
 req2.set_app_info(top.appinfo("1023079608", "sandbox0522e2394ad8813381ce7f457"))
 
@@ -82,7 +82,7 @@ import pdb;pdb.set_trace();
 try:
     resp2= req.getResponse("6100103aec81a954a67338dc51c649a873f4541bad050863651880146")
     print("==================>>",resp2)
-except Exception,e:
+except Exception as e:
     print(e)
 
 #=====================================get all of trades===========================#
@@ -114,5 +114,5 @@ try:
     # resp= req.getResponse("6101801ef126a76ee72479d320b397e3e91ca2072efe04e3651880146")
     # print(resp)
 
-except Exception,e:
+except Exception as e:
     print(e)
