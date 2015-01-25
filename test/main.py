@@ -47,7 +47,7 @@ req.fields="seller_nick,buyer_nick,title,type,created,sid,tid,seller_rate,buyer_
                     orders.outer_iid,orders.outer_sku_id,orders.refund_id,orders.seller_type,buyer_message"
 try:
     import pdb;pdb.set_trace()
-    resp= req.getResponse("6100103aec81a954a67338dc51c649a873f4541bad050863651880146")
+    resp = req.getResponse("6101f21f5df655ca131999e3b72ef19b085defe92c85d213651880146")
     print("====>>",resp)
     # req=top.api.TradeFullinfoGetRequest("gw.api.tbsandbox.com",80)
     # tid = resp['trades_sold_get_response']['trades']['trade'][0]['tid'];
@@ -68,7 +68,7 @@ tid = resp['trades_sold_get_response']['trades']['trade'][0]['tid'];
 req1.fields="status,buyer_message,tid"
 req1.tid = tid
 try:
-    resp1= req1.getResponse("6100103aec81a954a67338dc51c649a873f4541bad050863651880146")
+    resp1= req1.getResponse("6101f21f5df655ca131999e3b72ef19b085defe92c85d213651880146")
     print(resp1)
 except Exception as e:
     print(e)
@@ -80,7 +80,7 @@ req2.set_app_info(top.appinfo("1023079608", "sandbox0522e2394ad8813381ce7f457"))
 req2.tid=tid
 import pdb;pdb.set_trace();
 try:
-    resp2= req.getResponse("6100103aec81a954a67338dc51c649a873f4541bad050863651880146")
+    resp2= req.getResponse("6101f21f5df655ca131999e3b72ef19b085defe92c85d213651880146")
     print("==================>>",resp2)
 except Exception as e:
     print(e)
@@ -103,7 +103,7 @@ req.fields="seller_nick,buyer_nick,title,type,created,sid,tid,seller_rate,buyer_
 req.status="WAIT_SELLER_SEND_GOODS"
 try:
     # import pdb;pdb.set_trace()
-    resp= req.getResponse("6100103aec81a954a67338dc51c649a873f4541bad050863651880146")
+    resp= req.getResponse("6101f21f5df655ca131999e3b72ef19b085defe92c85d213651880146")
     print("====>>",resp)
 
     # req=top.api.TradeFullinfoGetRequest("gw.api.tbsandbox.com",80)

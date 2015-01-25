@@ -3,6 +3,9 @@ import tornado.web
 import tornado.httpclient
 import tornado.gen
 import json
+import threading
+
+import TBATHandler
 
 g_access_token = ""
 g_client_id = 23079608
@@ -50,14 +53,18 @@ class StartHandler(tornado.web.RequestHandler):
         # t_httpclient = tornado.httpclient.HTTPClient()
         t_request = tornado.httpclient.HTTPRequest(url=t_url,method="POST",body=t_body)
         t_response =yield t_httpclient.fetch(t_request)
-        import pdb;pdb.set_trace()
-        print t_response.body
+        # import pdb;pdb.set_trace()
+        # print t_response.body
         t_resp = json.loads(t_response.body.decode('utf8'))
         g_access_token = t_resp["access_token"]
-        print("====>>",g_access_token)
-        
+        print("====>>ACCESS_TOKEN:",g_access_token)
         # t_response = t_httpclient.fetch(t_request,handle_request)
         t_httpclient.close()
+        print("====>>START NEW THREAD...")
+        new_thread = threading.Thread(target = TBATHandler.send_goods,args = ())
+        new_thread.setDaemon(True)
+        new_thread.start()
+
     def post(self):
         self.write("hello")
 
