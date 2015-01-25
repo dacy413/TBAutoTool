@@ -3,6 +3,8 @@ import top.api
 import time
 
 g_url = "gw.api.tbsandbox.com"
+g_get_full_info_flag = 1
+g_select_interval = 10
 
 def send_goods(client_id="1023079608",client_secret="sandbox0522e2394ad8813381ce7f457",access_token="6101f21f5df655ca131999e3b72ef19b085defe92c85d213651880146"):
     while True:
@@ -42,17 +44,18 @@ def send_goods(client_id="1023079608",client_secret="sandbox0522e2394ad8813381ce
                         print("====>>BEFORE SEND GOODS TID:%s,STATUS:%s"%(i["tid"],i["status"]))
                         resp_send_goods = req_send_goods.getResponse(access_token)
                         # ====set tid for get trade full info==== #
-                        req_get_one_trade.tid = i["tid"]
-                        resp_get_one_trade = req_get_one_trade.getResponse(access_token)
-                        print("===>>AFTER SEND GOODS TID STATUS:%s"%resp_get_one_trade['trade_fullinfo_get_response']['trade']['status'])
-                        time.sleep(5)
+                        if g_get_full_info_flag:
+                            req_get_one_trade.tid = i["tid"]
+                            resp_get_one_trade = req_get_one_trade.getResponse(access_token)
+                            print("===>>AFTER SEND GOODS TID STATUS:%s"%resp_get_one_trade['trade_fullinfo_get_response']['trade']['status'])
+                            time.sleep(g_select_interval)
                     except Exception as e:
                         print("====>>AN EXCEPTION:",e)
                         break
         except Exception as e:
             print("====>>AN EXCEPTION:",e)
             break
-        time.sleep(10)
+        time.sleep(g_select_interval)
 
 if __name__ == '__main__':
     send_goods()

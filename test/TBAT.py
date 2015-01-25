@@ -10,11 +10,13 @@ import TBATHandler
 g_access_token = ""
 g_client_id = 23079608
 g_client_secret = "f4727f20522e2394ad8813381ce7f457"
+g_callback_url = "127.0.0.1:8888/starthandler"
 
 class MainHandler(tornado.web.RequestHandler):
     def get(self):
         # self.write("Good morning,dacy!")
-        t_url = "https://oauth.taobao.com/authorize?response_type=code&client_id=23079608&redirect_uri=127.0.0.1:8888/starthandler"
+        t_url = "https://oauth.taobao.com/authorize?response_type=code&client_id=%s&redirect_uri=%s"\
+        %(str(g_client_id),g_callback_url)
         self.redirect(t_url)
     # def get(self):
     #     self.write('<form action="/" method="post">'
@@ -45,7 +47,8 @@ class StartHandler(tornado.web.RequestHandler):
         self.request.method = "POST"
         t_code = self.get_argument("code")
         # t_url = "https://oauth.taobao.com/token"
-        t_url = "https://oauth.taobao.com/token?client_id=23079608&client_secret=f4727f20522e2394ad8813381ce7f457&grant_type=authorization_code&code=%s&redirect_uri=127.0.0.1:8888/starthandler"%t_code
+        t_url = "https://oauth.taobao.com/token?client_id=%s&client_secret=%s&grant_type=authorization_code&code=%s&redirect_uri=%s"\
+        %(g_client_id,g_client_secret,t_code,g_callback_url)
         # self.redirect(t_url)
         t_body = json.dumps({"client_id":str(g_client_id),"client_secret":g_client_secret,"grant_type":"authorization_code","code":str(t_code),"redirect_uri":"127.0.0.1:8888/starthandler"})
         # self.write("<script>window.location.href='%s';</script>"%t_url)
@@ -64,6 +67,7 @@ class StartHandler(tornado.web.RequestHandler):
         new_thread = threading.Thread(target = TBATHandler.send_goods,args = ())
         new_thread.setDaemon(True)
         new_thread.start()
+        self.write("<h1><center>YES,AUTO SEND GOODS SERVER IS RUNING...</center></h1>")
 
     def post(self):
         self.write("hello")
