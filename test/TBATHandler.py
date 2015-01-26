@@ -6,7 +6,7 @@ g_url = "gw.api.tbsandbox.com"
 g_get_full_info_flag = 1
 g_select_interval = 10
 
-def send_goods(client_id="1023079608",client_secret="sandbox0522e2394ad8813381ce7f457",access_token="6101f21f5df655ca131999e3b72ef19b085defe92c85d213651880146"):
+def send_goods(client_id="1023079608",client_secret="sandbox0522e2394ad8813381ce7f457",access_token="61025106bd3112dc211ee82e9cd794f0c131fa2608f2253182558410"):
     while True:
         print("====>>NEW LOOP")
         # import pdb;pdb.set_trace()
@@ -34,24 +34,25 @@ def send_goods(client_id="1023079608",client_secret="sandbox0522e2394ad8813381ce
         try:
             resp_get_all_trade = req_get_all_trade.getResponse(access_token)
             # for i in resp_get_all_trade['trades_sold_get_response']['trades']['trade']:
-            for i in resp_get_all_trade['trades_sold_increment_get_response']['trades']['trade']:
-                print("====>>SELECT TRADE TID:%s,STATUS:%s"%(i['tid'],i['status']))
-                if i["status"] == "WAIT_SELLER_SEND_GOODS":
-                    print("====>>NEW TRADE NO SEND GOODS TID:%s"%i["tid"])
-                    req_send_goods.tid = i["tid"]
-                    # import pdb;pdb.set_trace();
-                    try:
-                        print("====>>BEFORE SEND GOODS TID:%s,STATUS:%s"%(i["tid"],i["status"]))
-                        resp_send_goods = req_send_goods.getResponse(access_token)
-                        # ====set tid for get trade full info==== #
-                        if g_get_full_info_flag:
-                            req_get_one_trade.tid = i["tid"]
-                            resp_get_one_trade = req_get_one_trade.getResponse(access_token)
-                            print("===>>AFTER SEND GOODS TID STATUS:%s"%resp_get_one_trade['trade_fullinfo_get_response']['trade']['status'])
-                            time.sleep(g_select_interval)
-                    except Exception as e:
-                        print("====>>AN EXCEPTION:",e)
-                        break
+            if resp_get_all_trade['trades_sold_increment_get_response']['total_results'] != 0:
+                for i in resp_get_all_trade['trades_sold_increment_get_response']['trades']['trade']:
+                    print("====>>SELECT TRADE TID:%s,STATUS:%s"%(i['tid'],i['status']))
+                    if i["status"] == "WAIT_SELLER_SEND_GOODS":
+                        print("====>>NEW TRADE NO SEND GOODS TID:%s"%i["tid"])
+                        req_send_goods.tid = i["tid"]
+                        # import pdb;pdb.set_trace();
+                        try:
+                            print("====>>BEFORE SEND GOODS TID:%s,STATUS:%s"%(i["tid"],i["status"]))
+                            resp_send_goods = req_send_goods.getResponse(access_token)
+                            # ====set tid for get trade full info==== #
+                            if g_get_full_info_flag:
+                                req_get_one_trade.tid = i["tid"]
+                                resp_get_one_trade = req_get_one_trade.getResponse(access_token)
+                                print("===>>AFTER SEND GOODS TID STATUS:%s"%resp_get_one_trade['trade_fullinfo_get_response']['trade']['status'])
+                                time.sleep(g_select_interval)
+                        except Exception as e:
+                            print("====>>AN EXCEPTION:",e)
+                            break
         except Exception as e:
             print("====>>AN EXCEPTION:",e)
             break
