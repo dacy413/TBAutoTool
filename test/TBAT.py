@@ -61,13 +61,15 @@ class StartHandler(tornado.web.RequestHandler):
         # print t_response.body
         t_resp = json.loads(t_response.body.decode('utf8'))
         g_access_token = t_resp["access_token"]
-        print("====>>ACCESS_TOKEN:%s"%g_access_token)
+        logger.log(2,"====>>ACCESS_TOKEN:%s"%g_access_token)
+        # print("====>>ACCESS_TOKEN:%s"%g_access_token)
         # t_response = t_httpclient.fetch(t_request,handle_request)
         t_httpclient.close()
-        print("====>>START NEW THREAD...")
+        # print("====>>START NEW THREAD...")
         new_thread = threading.Thread(target = TBATHandler.send_goods,args = (str(g_client_id),str(g_client_secret),str(g_access_token)))
         new_thread.setDaemon(True)
         new_thread.start()
+        logger.log(2,"====>>NEW THREAD RUNING...")
         self.write("<h1><center>YES,AUTO SEND GOODS SERVER IS RUNING...</center></h1>")
 
     def post(self):
