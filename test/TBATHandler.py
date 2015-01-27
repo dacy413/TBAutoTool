@@ -2,14 +2,15 @@
 import top.api
 import time
 
-g_url = "gw.api.tbsandbox.com"
+#g_url = "gw.api.tbsandbox.com"
+g_url = "gw.api.taobao.com"
 g_get_full_info_flag = 1
-g_select_interval = 10
+g_select_interval = 20
 
 def send_goods(client_id="1023079608",client_secret="sandbox0522e2394ad8813381ce7f457",access_token="61025106bd3112dc211ee82e9cd794f0c131fa2608f2253182558410"):
     while True:
-        print("====>>NEW LOOP")
-        # import pdb;pdb.set_trace()
+        print("===========================>>NEW LOOP")
+        #import pdb;pdb.set_trace()
         #=====================================get all of trades===============================#
         # req_get_all_trade = top.api.TradesSoldGetRequest(g_url)#get all trades
         req_get_all_trade=top.api.TradesSoldIncrementGetRequest(g_url)#get increament trades
@@ -18,10 +19,11 @@ def send_goods(client_id="1023079608",client_secret="sandbox0522e2394ad8813381ce
                             status,payment,discount_fee,adjust_fee,post_fee,total_fee,pay_time"
         # set start and end time
         t_cur_time = time.time()
-        t_start_time = time.strftime("%Y-%m-%d %H:%M:%S",time.localtime(t_cur_time-60*60))
+        t_start_time = time.strftime("%Y-%m-%d %H:%M:%S",time.localtime(t_cur_time-60*60*12))
         t_end_time = time.strftime("%Y-%m-%d %H:%M:%S",time.localtime(t_cur_time))
         req_get_all_trade.start_modified = t_start_time
         req_get_all_trade.end_modified = t_end_time
+	print("====>>CURRENT TIME %s"%t_end_time)
         # req_get_all_trade.status = "WAIT_SELLER_SEND_GOODS"#only process WAIT_SELLER_SEND_GOODS trades
         #=====================================get a trade full info============================#
         req_get_one_trade = top.api.TradeFullinfoGetRequest(g_url)

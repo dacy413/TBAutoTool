@@ -11,7 +11,7 @@ g_access_token = ""
 g_client_id = 23079608
 g_client_secret = "f4727f20522e2394ad8813381ce7f457"
 # g_callback_url = "127.0.0.1:8888/starthandler"
-g_callback_url = "121.41.55.86:8888/starthandler"
+g_callback_url = "121.41.55.86:8800/starthandler"
 
 class MainHandler(tornado.web.RequestHandler):
     def get(self):
@@ -61,11 +61,11 @@ class StartHandler(tornado.web.RequestHandler):
         # print t_response.body
         t_resp = json.loads(t_response.body.decode('utf8'))
         g_access_token = t_resp["access_token"]
-        print("====>>ACCESS_TOKEN:",g_access_token)
+        print("====>>ACCESS_TOKEN:%s"%g_access_token)
         # t_response = t_httpclient.fetch(t_request,handle_request)
         t_httpclient.close()
         print("====>>START NEW THREAD...")
-        new_thread = threading.Thread(target = TBATHandler.send_goods,args = (g_client_id,g_client_secret,g_access_token))
+        new_thread = threading.Thread(target = TBATHandler.send_goods,args = (str(g_client_id),str(g_client_secret),str(g_access_token)))
         new_thread.setDaemon(True)
         new_thread.start()
         self.write("<h1><center>YES,AUTO SEND GOODS SERVER IS RUNING...</center></h1>")
@@ -80,5 +80,5 @@ app = tornado.web.Application\
     ])
 
 if __name__ == '__main__':
-    app.listen(8888)
+    app.listen(8800)
     tornado.ioloop.IOLoop.instance().start()
