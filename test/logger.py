@@ -1,16 +1,18 @@
 import logging
-import config
+import ConfigParser
 
 g_logger = None
+g_config = ConfigParser.ConfigParser()
 
 def initLogManager():
-    global g_logger
-    g_logger = logging.getLogger(config.loger_name)
+    global g_logger,g_config
+    g_config.read("config.ini")
+    g_logger = logging.getLogger(g_config.get("Log","loger_name"))
     g_logger.setLevel(logging.DEBUG)
-    fh = logging.FileHandler(config.ui_log_path)
-    fh.setLevel(config.file_lvl)
+    fh = logging.FileHandler(g_config.get("Log","ui_log_path"))
+    fh.setLevel(int(g_config.get("Log","file_lvl")))
     ch = logging.StreamHandler()
-    ch.setLevel(config.con_lvl)
+    ch.setLevel(int(g_config.get("Log","con_lvl")))
     formatter = logging.Formatter('%(asctime)s %(name)-12s %(levelname)-8s %(message)s')
     fh.setFormatter(formatter)
     ch.setFormatter(formatter)

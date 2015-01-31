@@ -4,6 +4,7 @@ import tornado.httpclient
 import tornado.gen
 import json
 import threading
+import ConfigParser
 
 import TBATHandler
 
@@ -12,6 +13,8 @@ g_client_id = 23079608
 g_client_secret = "f4727f20522e2394ad8813381ce7f457"
 # g_callback_url = "127.0.0.1:8888/starthandler"
 g_callback_url = "121.41.55.86:8800/starthandler"
+g_config = ConfigParser.ConfigParser()
+g_config.read("config.ini")
 
 class MainHandler(tornado.web.RequestHandler):
     def get(self):
@@ -42,6 +45,8 @@ class MainHandler(tornado.web.RequestHandler):
 #     g_access_token = response.body["access_token"]
 
 class StartHandler(tornado.web.RequestHandler):
+    global g_config
+
     @tornado.gen.coroutine
     def get(self):
         # self.write("Good morning,dacy!")
@@ -66,10 +71,13 @@ class StartHandler(tornado.web.RequestHandler):
         # t_response = t_httpclient.fetch(t_request,handle_request)
         t_httpclient.close()
         # print("====>>START NEW THREAD...")
-        new_thread = threading.Thread(target = TBATHandler.send_goods,args = (str(g_client_id),str(g_client_secret),str(g_access_token)))
-        new_thread.setDaemon(True)
-        new_thread.start()
-        logger.log(2,"====>>NEW THREAD RUNING...")
+        if g_config.get("app","run_mode"):
+            new_thread = threading.Thread(target = TBATHandler.send_goods,args = (str(g_client_id),str(g_client_secret),str(g_access_token)))
+            new_thread.setDaemon(True)
+            new_thread.start()
+            logger.log(2,"====>>NEW THREAD RUNING...")
+        else:
+            g_config.set("app","access_token",str(g_access_token))
         self.write("<h1><center>YES,AUTO SEND GOODS SERVER IS RUNING...</center></h1>")
 
     def post(self):

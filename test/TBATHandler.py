@@ -1,10 +1,12 @@
 # -*- coding: utf-8 -*-
 import top.api
 import time
-
+import ConfigParser
 import logger
-logger.initLogManager()
 
+logger.initLogManager()
+g_config = ConfigParser.ConfigParser()
+g_config.read("config.ini")
 #g_url = "gw.api.tbsandbox.com"
 g_url = "gw.api.taobao.com"
 g_get_full_info_flag = 1
@@ -64,5 +66,9 @@ def send_goods(client_id="1023079608",client_secret="sandbox0522e2394ad8813381ce
             break
         time.sleep(g_select_interval)
         logger.log(1,"===========================>>NEW LOOP END<<==========================")
+
 if __name__ == '__main__':
-    send_goods()
+    if g_config.get("app","run_mode"):
+        send_goods()
+    else:
+        send_goods(g_config.get("app","client_id"),g_config.get("app","client_secret"),g_config.get("app","access_token"))
