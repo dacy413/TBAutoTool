@@ -7,7 +7,9 @@ import threading
 import ConfigParser
 
 import TBATHandler
+import logger
 
+logger.initLogManager()
 g_access_token = ""
 g_client_id = 23079608
 g_client_secret = "f4727f20522e2394ad8813381ce7f457"
@@ -71,13 +73,14 @@ class StartHandler(tornado.web.RequestHandler):
         # t_response = t_httpclient.fetch(t_request,handle_request)
         t_httpclient.close()
         # print("====>>START NEW THREAD...")
-        if g_config.get("app","run_mode"):
+        if int(g_config.get("app","run_mode")) == 1:
             new_thread = threading.Thread(target = TBATHandler.send_goods,args = (str(g_client_id),str(g_client_secret),str(g_access_token)))
             new_thread.setDaemon(True)
             new_thread.start()
             logger.log(2,"====>>NEW THREAD RUNING...")
         else:
-            g_config.set("app","access_token",str(g_access_token))
+            g_config.set("app","access_token","%s"%str(g_access_token))
+	    g_config.write(open("config.ini","w"))
         self.write("<h1><center>YES,AUTO SEND GOODS SERVER IS RUNING...</center></h1>")
 
     def post(self):

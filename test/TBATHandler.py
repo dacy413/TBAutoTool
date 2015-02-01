@@ -16,7 +16,7 @@ def send_goods(client_id="1023079608",client_secret="sandbox0522e2394ad8813381ce
     while True:
         # print("===========================>>NEW LOOP<<==========================")
         logger.log(1,"===========================>>NEW LOOP START<<==========================")
-        #import pdb;pdb.set_trace()
+        import pdb;pdb.set_trace()
         #=====================================get all of trades===============================#
         # req_get_all_trade = top.api.TradesSoldGetRequest(g_url)#get all trades
         req_get_all_trade=top.api.TradesSoldIncrementGetRequest(g_url)#get increament trades
@@ -68,7 +68,7 @@ def send_goods(client_id="1023079608",client_secret="sandbox0522e2394ad8813381ce
         logger.log(1,"===========================>>NEW LOOP END<<==========================")
 
 if __name__ == '__main__':
-    if g_config.get("app","run_mode"):
+    if int(g_config.get("app","run_mode")) == 1:
         send_goods()
     else:
         send_goods(g_config.get("app","client_id"),g_config.get("app","client_secret"),g_config.get("app","access_token"))
